@@ -7,6 +7,8 @@ import Record from './record.js'
 import GetRecords from './getRecords.js'
 import "./App.css";
 
+import Navbar from './components/Navbar';
+
 class App extends Component {
 
   constructor(props){
@@ -52,12 +54,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <div>
-            <NavLink to='/upload'>Upload</NavLink>
-          </div>
-          <div>
-            <NavLink to='/record'>Record</NavLink>
-          </div>
+            <Navbar />
             <Switch>
               <Route path='/upload' render={props => {
                 return <Record web3={web3} accounts={accounts} contract={contract}></Record>
