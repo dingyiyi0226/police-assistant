@@ -7,13 +7,13 @@ class Record extends Component {
     this.state = {
       offense_type: "",
       user_id: "",
-      discription: ""
+      description: ""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.labelChange = this.labelChange.bind(this);
     this.IDChange = this.IDChange.bind(this);
-    this.discriptionChange = this.discriptionChange.bind(this);
+    this.descriptionChange = this.descriptionChange.bind(this);
   }
 
   labelChange(event) {
@@ -23,13 +23,13 @@ class Record extends Component {
     console.log(this.state);
     let timestamp = 'test'
     this.props.contract.methods.addCrimeReport(
-      this.state.user_id, timestamp, this.state.offense_type, this.state.discription).send({from: this.props.accounts[0]});
+      this.state.user_id, timestamp, this.state.offense_type, this.state.description).send({from: this.props.accounts[0]});
   }
   IDChange(event) {
     this.setState({ user_id: event.target.value });
   }
-  discriptionChange(event) {
-    this.setState({ discription: event.target.value });
+  descriptionChange(event) {
+    this.setState({ description: event.target.value });
   }
 
   render() {
@@ -76,8 +76,8 @@ class Record extends Component {
               </div>
 
               <div className="mb-3">
-                <label className="form-label" htmlFor="discription">Discription: </label>
-                <input className="form-control" type="text" id="discription" name="discription" placeholder="Exnter here..." onChange={this.discriptionChange} />
+                <label className="form-label" htmlFor="description">Description: </label>
+                <input className="form-control" type="text" id="description" name="description" placeholder="Exnter here..." onChange={this.descriptionChange} />
               </div>
 
               <button className="btn btn-primary" onClick={() => this.handleSubmit()}>Submit</button>
