@@ -6,8 +6,11 @@ class GetRecords extends Component {
     super(props)
     this.state = {
       record_count: 0,
-      records: '',
+      records: [],
+      show_money_input: false
     };
+    this.handleClick = this.handleClick.bind(this);
+
   }
 
   getRecordCount = async () => {
@@ -20,7 +23,19 @@ class GetRecords extends Component {
     const { contract, accounts } = this.state
     const response = await this.props.contract.methods.getAllCrimeDetails().call()
     console.log(response)
-    // this.setState({'record_count': response})
+    this.setState({ 'records': response })
+  }
+
+  sendRewards = async () => {
+    const { contract, accounts } = this.state
+  }
+
+  handleClick() {
+    this.setState({ "show_money_input": true })
+  }
+  componentDidMount() {
+    this.getRecordCount();
+    this.getRecords();
   }
 
   render() {
@@ -35,18 +50,26 @@ class GetRecords extends Component {
               <ul className="list-group">
                 <li className="list-group-item">
                   Record Counts: {this.state.record_count}
-                  <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.getRecordCount()}>Get Record Counts</button>
+                  {/* <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.getRecordCount()}>Get Record Counts</button> */}
                 </li>
-                <li className="list-group-item">
+                {/* <li className="list-group-item">
                   Records: {this.state.records}
                   <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.getRecords()}>Get Records</button>
-                </li>
+                </li> */}
+                <ul className="todo-app__list" id="todo-list">
+                  {this.state.records.map(item => (
+                    <li className="list-group-item" key={item.aadress} >
+                      {item.description}
+                      <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={this.handleClick}>$</button>
+                      <input type="text" style={{ display: (this.state.show_money_input) ? "block" : "none" }}></input>
+                    </li>))}
+                </ul>
               </ul>
             </div>
           </div>
         </div>
 
-      </React.Fragment>
+      </React.Fragment >
     )
   }
 }
