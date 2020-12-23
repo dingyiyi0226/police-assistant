@@ -22,8 +22,10 @@ class Record extends Component {
   handleSubmit() {
     console.log(this.state);
     let timestamp = 'test'
+    console.log(this.props.accounts)
     this.props.contract.methods.addCrimeReport(
       this.state.user_id, timestamp, this.state.offense_type, this.state.description).send({from: this.props.accounts[0]});
+
   }
   IDChange(event) {
     this.setState({ user_id: event.target.value });

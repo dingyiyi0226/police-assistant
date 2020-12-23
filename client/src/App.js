@@ -40,6 +40,7 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
+      console.log(accounts)
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
