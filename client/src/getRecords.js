@@ -18,7 +18,7 @@ class GetRecords extends Component {
   }
   getRecords = async () => {
     const { contract, accounts } = this.state
-    const response = await this.props.contract.methods.getCrimeBlock(0).call()
+    const response = await this.props.contract.methods.getAllCrimeDetails().call()
     console.log(response)
     // this.setState({'record_count': response})
   }
