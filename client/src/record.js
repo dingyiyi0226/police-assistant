@@ -20,8 +20,10 @@ class Record extends Component {
     this.setState({ offense_type: event.target.value });
   }
   handleSubmit() {
-    // e.preventDefault();
     console.log(this.state);
+    let timestamp = 'test'
+    this.props.contract.methods.addCrimeReport(
+      this.state.user_id, timestamp, this.state.offense_type, this.state.discription).send({from: this.props.accounts[0]});
   }
   IDChange(event) {
     this.setState({ user_id: event.target.value });

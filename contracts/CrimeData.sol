@@ -4,14 +4,14 @@ pragma experimental ABIEncoderV2;
 
 contract CrimeData {
   struct CrimeDetails {
-    uint crime_id;
+    string crime_id;
     string timestamp;
     string offense_code;
     string description;
   }
   CrimeDetails[] public crime;
 
-  function addCrimeReport(uint _crime_id, string memory _timestamp, string memory _offense_code, string memory _description) public returns(uint) {
+  function addCrimeReport(string memory _crime_id, string memory _timestamp, string memory _offense_code, string memory _description) public returns(uint) {
     crime.length++;
     crime[crime.length-1].crime_id = _crime_id;
     crime[crime.length-1].timestamp = _timestamp;
@@ -24,7 +24,7 @@ contract CrimeData {
     return crime.length;
   }
   
-  function getCrimeBlock(uint index) public view returns (uint, string memory, string memory, string memory)
+  function getCrimeBlock(uint index) public view returns (string memory, string memory, string memory, string memory)
   {
     return (crime[index].crime_id, crime[index].timestamp, crime[index].offense_code, crime[index].description);
   }
