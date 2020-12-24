@@ -7,8 +7,18 @@ class GetRecords extends Component {
     super(props)
     this.state = {
       record_count: 0,
-      records: '',
+      records: [],
+      show_money_input: false
     };
+    this.handleClick = this.handleClick.bind(this);
+
+  }
+
+  componentDidMount(){
+    if(this.props.web3){
+      this.getRecordCount();
+      this.getRecords();
+    }
   }
 
   getRecordCount = async () => {
@@ -17,11 +27,17 @@ class GetRecords extends Component {
     console.log(response)
     this.setState({ 'record_count': response })
   }
+
   getRecords = async () => {
     const { contract, accounts } = this.props
     const response = await contract.methods.getAllCrimeDetails().call()
     console.log(response)
-    // this.setState({'record_count': response})
+    this.setState({ 'records': response })
+  }
+
+
+  handleClick() {
+    this.setState({ "show_money_input": true })
   }
 
   sendReward = async () => {
@@ -48,19 +64,24 @@ class GetRecords extends Component {
             <div className="card-body">
               <ul className="list-group">
                 <li className="list-group-item">
-                  Record Counts: {this.state.record_count}
-                  <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.getRecordCount()}>Get Record Counts</button>
-                </li>
-                <li className="list-group-item">
-                  Records: {this.state.records}
-                  <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.getRecords()}>Get Records</button>
-                </li>
-                <li className="list-group-item">
                   Send Reward:
-                <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.sendReward()}>Send Reward</button>
+                  <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.sendReward()}>Send Reward</button>
                 </li>
-
               </ul>
+
+              <ul className="list-group">
+                <li className="list-group-item">
+                  Record Counts: {this.state.record_count}
+                </li>
+                { this.state.records.map( (record, index) => (
+                  <li className="list-group-item" key={index} >
+                    {record.description}
+                    <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={this.handleClick}>$</button>
+                    <input type="text" style={{ display: (this.state.show_money_input) ? "block" : "none" }}></input>
+                  </li>
+                ))}
+              </ul>
+
             </div>
           </div>
         </div>
