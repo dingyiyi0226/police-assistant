@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Web3 from 'web3';
 
 class GetRecords extends Component {
 
@@ -11,16 +12,29 @@ class GetRecords extends Component {
   }
 
   getRecordCount = async () => {
-    const { contract, accounts } = this.state
-    const response = await this.props.contract.methods.getCrimeCount().call();
+    const { contract, accounts } = this.props
+    const response = await contract.methods.getCrimeCount().call();
     console.log(response)
     this.setState({ 'record_count': response })
   }
   getRecords = async () => {
-    const { contract, accounts } = this.state
-    const response = await this.props.contract.methods.getAllCrimeDetails().call()
+    const { contract, accounts } = this.props
+    const response = await contract.methods.getAllCrimeDetails().call()
     console.log(response)
     // this.setState({'record_count': response})
+  }
+
+  sendReward = async () => {
+    const { accounts, contract, web3 } = this.props
+
+    let rewardReceiver = '0x0309C3750bE43B16AcF7Acb481bD142beff073bD'
+    let rewardAmount = 3
+
+    const response = await web3.eth.sendTransaction({
+      from: accounts[0],
+      to: rewardReceiver,
+      value: Web3.utils.toWei(rewardAmount.toString(), 'ether')
+    })
   }
 
   render() {
@@ -41,6 +55,11 @@ class GetRecords extends Component {
                   Records: {this.state.records}
                   <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.getRecords()}>Get Records</button>
                 </li>
+                <li className="list-group-item">
+                  Send Reward:
+                <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.sendReward()}>Send Reward</button>
+                </li>
+
               </ul>
             </div>
           </div>

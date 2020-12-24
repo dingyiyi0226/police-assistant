@@ -29,8 +29,7 @@ contract CrimeData {
     return crime.length;
   }
   
-  function getCrimeBlock(uint index) public view returns (string memory, string memory, string memory, string memory, string memory)
-  {
+  function getCrimeBlock(uint index) public view returns (string memory, string memory, string memory, string memory, string memory){
     return (crime[index].aaccount, crime[index].timestamp, crime[index].offense_code, crime[index].description, crime[index].image_url);
   }
 
@@ -42,10 +41,5 @@ contract CrimeData {
     }
     return allCrime;
   }
-
-  // function sendReward(address _sender, uint value) public payable
-  // {
-  //   _sender.send(value)
-  // }
 
 }
