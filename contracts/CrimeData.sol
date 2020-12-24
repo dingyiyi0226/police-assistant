@@ -4,24 +4,24 @@ pragma experimental ABIEncoderV2;
 
 contract CrimeData {
   struct CrimeDetails {
-    string aaccount;
+    string account;
     string timestamp;
-    string offense_code;
+    string offenseCode;
     string description;
-    string image_url;
+    string imageURL;
 
-    int reward_state;
+    int rewardState;
   }
   CrimeDetails[] public crime;
 
-  function addCrimeReport(string memory _account, string memory _timestamp, string memory _offense_code, string memory _description, string memory _image_url) public returns(uint) {
+  function addCrimeReport(string memory _account, string memory _timestamp, string memory _offenseCode, string memory _description, string memory _imageURL) public returns(uint) {
     crime.length++;
-    crime[crime.length-1].aaccount = _account;
+    crime[crime.length-1].account = _account;
     crime[crime.length-1].timestamp = _timestamp;
-    crime[crime.length-1].offense_code = _offense_code;
+    crime[crime.length-1].offenseCode = _offenseCode;
     crime[crime.length-1].description = _description;
-    crime[crime.length-1].image_url = _image_url;
-    crime[crime.length-1].reward_state = -1;  // -1 not verified crime
+    crime[crime.length-1].imageURL = _imageURL;
+    crime[crime.length-1].rewardState = -1;  // -1 not verified crime
     return crime.length;
   }
   
@@ -30,7 +30,7 @@ contract CrimeData {
   }
   
   function getCrimeBlock(uint index) public view returns (string memory, string memory, string memory, string memory, string memory){
-    return (crime[index].aaccount, crime[index].timestamp, crime[index].offense_code, crime[index].description, crime[index].image_url);
+    return (crime[index].account, crime[index].timestamp, crime[index].offenseCode, crime[index].description, crime[index].imageURL);
   }
 
   function getAllCrimeDetails() public view returns (CrimeDetails[] memory){
