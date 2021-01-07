@@ -31,8 +31,9 @@ class CrimePlatform extends Component {
     this.setState({ 'records': response })
   }
 
-  sendReward = async (crimeId, account) => {
+  sendReward = async (e, crimeId, account) => {
     const { accounts, contract, web3 } = this.props
+    e.target.disabled = true;
 
     // let rewardReceiver = '0x0309C3750bE43B16AcF7Acb481bD142beff073bD'
     let rewardReceiver = account
@@ -48,7 +49,6 @@ class CrimePlatform extends Component {
     })
 
     await contract.methods.setRewardState(crimeId).send({ from: this.props.accounts[0] })
-
   }
 
   onSelectOption = (e) => {
@@ -102,7 +102,7 @@ class CrimePlatform extends Component {
                           $
                         </button>
                       ) : (
-                        <button type="button" className="btn btn-primary" onClick={ () => this.sendReward(record.crimeId, record.account)}>
+                        <button type="button" className="btn btn-primary reward-btn" onClick={ (e) => this.sendReward(e, record.crimeId, record.account)}>
                           $
                         </button>
                       )
