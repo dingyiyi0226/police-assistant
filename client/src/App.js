@@ -3,8 +3,8 @@ import { BrowserRouter, NavLink, Switch, Route } from 'react-router-dom'
 import CrimeDataContract from "./contracts/CrimeData.json";
 import getWeb3 from "./getWeb3";
 
-import Record from './record.js'
-import GetRecords from './getRecords.js'
+import CrimeUploader from './crimeUploader.js'
+import CrimePlatform from './crimePlatform.js'
 import "./App.css";
 
 import Navbar from './components/Navbar';
@@ -58,10 +58,10 @@ class App extends Component {
             <Navbar />
             <Switch>
               <Route path='/upload' render={props => {
-                return <Record web3={web3} accounts={accounts} contract={contract}></Record>
+                return <CrimeUploader web3={web3} accounts={accounts} contract={contract}></CrimeUploader>
               }}></Route>
               <Route path='/record' render={props => {
-                return <GetRecords web3={web3} accounts={accounts} contract={contract}></GetRecords>
+                return <CrimePlatform web3={web3} accounts={accounts} contract={contract}></CrimePlatform>
               }}></Route>
             </Switch>
         </div>

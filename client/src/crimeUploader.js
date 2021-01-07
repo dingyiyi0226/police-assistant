@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-class Record extends Component {
+class CrimeUploader
+ extends Component {
 
   constructor(props) {
     super(props)
@@ -92,6 +93,4 @@ class Record extends Component {
   }
 }
 
-
-
-export default Record
+export default CrimeUploader

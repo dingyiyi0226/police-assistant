@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
 
-class GetRecords extends Component {
+class CrimePlatform extends Component {
 
   constructor(props) {
     super(props)
@@ -64,12 +64,6 @@ class GetRecords extends Component {
         <div className="container d-flex justify-content-center">
           <div className="card" style={{ width: "60%", textAlign: 'left' }}>
             <div className="card-body">
-              <ul className="list-group">
-                {/* <li className="list-group-item">
-                  Send Reward:
-                  <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={() => this.sendReward()}>Send Reward</button>
-                </li> */}
-              </ul>
 
               <ul className="list-group">
                 <li className="list-group-item">
@@ -92,4 +86,4 @@ class GetRecords extends Component {
   }
 }
 
-export default GetRecords
+export default CrimePlatform
