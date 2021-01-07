@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson', 'Other']
+
 class CrimeUploader
  extends Component {
 
@@ -48,39 +50,17 @@ class CrimeUploader
                 <label className="form-label" htmlFor="user_id">User ID</label>
                 <input className="form-control" type="text" id="user_id" name="user_id" placeholder="dingyiyi" onChange={this.IDChange} />
               </div>
-
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="offense_type" id="homicide" value="homicide" checked={this.state.offense_type === "homicide"} onChange={this.labelChange} />
-                <label className="form-check-label" htmlFor="homicide">homicide</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="offense_type" id="forcible rape" value="forcible rape" checked={this.state.offense_type === "forcible rape"} onChange={this.labelChange} />
-                <label className="form-check-label" htmlFor="female">forcible rape</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="offense_type" id="robbery" value="robbery" checked={this.state.offense_type === "robbery"} onChange={this.labelChange} />
-                <label className="form-check-label" htmlFor="robbery">robbery</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="offense_type" id="assault" value="assault" checked={this.state.offense_type === "assault"} onChange={this.labelChange} />
-                <label className="form-check-label" htmlFor="assault">assault</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="offense_type" id="burglary" value="burglary" checked={this.state.offense_type === "burglary"} onChange={this.labelChange} />
-                <label className="form-check-label" htmlFor="female">burglary</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="offense_type" id="arson" value="arson" checked={this.state.offense_type === "arson"} onChange={this.labelChange} />
-                <label className="form-check-label" htmlFor="female">arson</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="offense_type" id="other" value="other" checked={this.state.offense_type === "other"} onChange={this.labelChange} />
-                <label className="form-check-label" htmlFor="other">other</label>
-              </div>
-
+              { OFFENSE_TYPE.map( (type, index) => (
+                  <div className="form-check form-check-inline" key={index}>
+                    <input className="form-check-input" type="radio" name="offense_type" id={type} value={type}
+                           checked={this.state.offense_type === type} onChange={this.labelChange} />
+                    <label className="form-check-label" htmlFor={type}>{type}</label>
+                  </div>
+                ))
+              }
               <div className="mb-3">
                 <label className="form-label" htmlFor="description">Description: </label>
-                <input className="form-control" type="text" id="description" name="description" placeholder="Exnter here..." onChange={this.descriptionChange} />
+                <input className="form-control" type="text" id="description" name="description" placeholder="Enter here..." onChange={this.descriptionChange} />
               </div>
 
               <button className="btn btn-primary" onClick={() => this.handleSubmit()}>Submit</button>
