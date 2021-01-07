@@ -1,3 +1,13 @@
-.filterOption {
+.filter-option {
   text-align: left;
+}
+
+.crime-card {
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.crime-card img {
+  /*width: 60px;*/
 }

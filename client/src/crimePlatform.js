@@ -3,15 +3,17 @@ import Web3 from 'web3';
 
 import './style.css'
 
-const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson']
+import testImg from './logo.svg'
+
+const OFFENSE_TYPE = ['All', 'Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson', 'Other']
 
 class CrimePlatform extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      recordCount: 0,
       records: [],
+      // recordCount: 0,
       offenseType: '',
     };
     this.handleClick = this.handleClick.bind(this);
@@ -20,17 +22,17 @@ class CrimePlatform extends Component {
 
   componentDidMount() {
     if (this.props.web3) {
-      this.getRecordCount();
+      // this.getRecordCount();
       this.getRecords();
     }
   }
 
-  getRecordCount = async () => {
-    const { contract } = this.props
-    const response = await contract.methods.getCrimeCount().call();
-    console.log(response)
-    this.setState({ 'recordCount': response })
-  }
+  // getRecordCount = async () => {
+  //   const { contract } = this.props
+  //   const response = await contract.methods.getCrimeCount().call();
+  //   console.log(response)
+  //   this.setState({ 'recordCount': response })
+  // }
 
   getRecords = async () => {
     const { contract } = this.props
@@ -65,6 +67,17 @@ class CrimePlatform extends Component {
     this.setState({offenseType: e.target.value})
   }
 
+  filteredRecord = () => {
+    const { offenseType, records } = this.state
+
+    if (offenseType === '' || offenseType.toLowerCase() === 'all'){
+      return records
+    }
+    else {
+      return records.filter( record => record.offenseCode === offenseType.toLowerCase() )
+    }
+  }
+
   render() {
     if (!this.props.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -75,7 +88,7 @@ class CrimePlatform extends Component {
         <div className="container">
           <div className="row">
 
-            <div className="col-3 filterOption">
+            <div className="col-3 filter-option">
             { OFFENSE_TYPE.map( type => (
               <div className="form-check" key={type}>
                 <input className="form-check-input" type="radio" name="offenseType" value={type} id={type}
@@ -87,23 +100,31 @@ class CrimePlatform extends Component {
             ))}
             </div>
 
-            <div className="col-8">
-              <div className="card">
-                <div className="card-body">
-                  <div className="card-header">
-                    Record Counts: {this.state.recordCount}
-                  </div>
-                  <ul className="list-group">
-                    { this.state.records.map((record, index) => (
-                      <li className="list-group-item" key={index} >
-                        {record.description}
-                        <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={this.handleClick}>$</button>
-                      </li>
-                    ))}
-                  </ul>
-
-                </div>
+            <div className="col-7">
+              <div>
+                Record Counts: {this.filteredRecord().length}
               </div>
+              { this.filteredRecord().map((record, index) => (
+                <div className="card crime-card" key={index} >
+                  <div className="card-header d-flex justify-content-between align-items-center">
+                    <p className="m-0">{record.account}</p>
+                    <button type="button" className="btn btn-primary align-items-center" onClick={this.handleClick}>
+                      $
+                    </button>
+                  </div>
+                  <div className="card-body container">
+                    <div className="row">
+                      <div className="col-8">
+                        <p>{record.description}</p>
+                      </div>
+                      <div className="col-4">
+                        <img src={testImg} className="rounded w-100" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
             </div>
           </div>
         </div>
