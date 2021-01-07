@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
 
+import './style.css'
+
+const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson']
+
 class CrimePlatform extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      record_count: 0,
-      records: []
+      recordCount: 0,
+      records: [],
+      offenseType: '',
     };
     this.handleClick = this.handleClick.bind(this);
 
@@ -24,7 +29,7 @@ class CrimePlatform extends Component {
     const { contract } = this.props
     const response = await contract.methods.getCrimeCount().call();
     console.log(response)
-    this.setState({ 'record_count': response })
+    this.setState({ 'recordCount': response })
   }
 
   getRecords = async () => {
@@ -55,28 +60,50 @@ class CrimePlatform extends Component {
     })
   }
 
+  onSelectOption = (e) => {
+    console.log(e.target.value)
+    this.setState({offenseType: e.target.value})
+  }
+
   render() {
     if (!this.props.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
+
     return (
       <React.Fragment>
-        <div className="container d-flex justify-content-center">
-          <div className="card" style={{ width: "60%", textAlign: 'left' }}>
-            <div className="card-body">
+        <div className="container">
+          <div className="row">
 
-              <ul className="list-group">
-                <li className="list-group-item">
-                  Record Counts: {this.state.record_count}
-                </li>
-                {this.state.records.map((record, index) => (
-                  <li className="list-group-item" key={index} >
-                    {record.description}
-                    <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={this.handleClick}>$</button>
-                  </li>
-                ))}
-              </ul>
+            <div className="col-3 filterOption">
+            { OFFENSE_TYPE.map( type => (
+              <div className="form-check" key={type}>
+                <input className="form-check-input" type="radio" name="offenseType" value={type} id={type}
+                       onChange={this.onSelectOption} checked={this.state.offenseType===type}/>
+                <label className="form-check-label" htmlFor={type}>
+                  {type}
+                </label>
+              </div>
+            ))}
+            </div>
 
+            <div className="col-8">
+              <div className="card">
+                <div className="card-body">
+                  <div className="card-header">
+                    Record Counts: {this.state.recordCount}
+                  </div>
+                  <ul className="list-group">
+                    { this.state.records.map((record, index) => (
+                      <li className="list-group-item" key={index} >
+                        {record.description}
+                        <button type="button" className="btn btn-primary" style={{ float: 'right' }} onClick={this.handleClick}>$</button>
+                      </li>
+                    ))}
+                  </ul>
+
+                </div>
+              </div>
             </div>
           </div>
         </div>
