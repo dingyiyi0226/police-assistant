@@ -23,7 +23,7 @@ class App extends Component {
   componentDidMount = async () => {
     try {
       // Get network provider and web3 instance.
-      console.log('componentDidMount')
+      // console.log('componentDidMount')
       const web3 = await getWeb3();
 
       // Use web3 to get the user's accounts.
@@ -40,7 +40,7 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
-      console.log(accounts)
+      // console.log(accounts)
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(

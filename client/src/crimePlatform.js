@@ -13,53 +13,42 @@ class CrimePlatform extends Component {
     super(props)
     this.state = {
       records: [],
-      // recordCount: 0,
       offenseType: '',
     };
-    this.handleClick = this.handleClick.bind(this);
 
   }
 
   componentDidMount() {
     if (this.props.web3) {
-      // this.getRecordCount();
       this.getRecords();
     }
   }
 
-  // getRecordCount = async () => {
-  //   const { contract } = this.props
-  //   const response = await contract.methods.getCrimeCount().call();
-  //   console.log(response)
-  //   this.setState({ 'recordCount': response })
-  // }
-
   getRecords = async () => {
     const { contract } = this.props
     const response = await contract.methods.getAllCrimeDetails().call()
-    console.log(response)
+    console.log('resp', response)
     this.setState({ 'records': response })
   }
 
-
-  handleClick(e) {
-    e.target.style.backgroundColor = "green"
-    e.target.style.border = "green"
-    e.target.disabled = true
-    this.sendReward();
-  }
-
-  sendReward = async () => {
+  sendReward = async (crimeId, account) => {
     const { accounts, contract, web3 } = this.props
 
-    let rewardReceiver = '0x0309C3750bE43B16AcF7Acb481bD142beff073bD'
+    // let rewardReceiver = '0x0309C3750bE43B16AcF7Acb481bD142beff073bD'
+    let rewardReceiver = account
     let rewardAmount = 3
+
+    console.log('from', account[0])
+    console.log('to', account)
 
     const response = await web3.eth.sendTransaction({
       from: accounts[0],
       to: rewardReceiver,
       value: Web3.utils.toWei(rewardAmount.toString(), 'ether')
     })
+
+    await contract.methods.setRewardState(crimeId).send({ from: this.props.accounts[0] })
+
   }
 
   onSelectOption = (e) => {
@@ -74,7 +63,7 @@ class CrimePlatform extends Component {
       return records
     }
     else {
-      return records.filter( record => record.offenseCode === offenseType.toLowerCase() )
+      return records.filter( record => record.offenseCode.toLowerCase() === offenseType.toLowerCase() )
     }
   }
 
@@ -107,15 +96,23 @@ class CrimePlatform extends Component {
               { this.filteredRecord().map((record, index) => (
                 <div className="card crime-card" key={index} >
                   <div className="card-header d-flex justify-content-between align-items-center">
-                    <p className="m-0">{record.account}</p>
-                    <button type="button" className="btn btn-primary align-items-center" onClick={this.handleClick}>
-                      $
-                    </button>
+                    <p className="m-0">{record.name}</p>
+                    { record.rewardState === "1" ? (
+                        <button type="button" className="btn btn-primary reward-btn" disabled>
+                          $
+                        </button>
+                      ) : (
+                        <button type="button" className="btn btn-primary" onClick={ () => this.sendReward(record.crimeId, record.account)}>
+                          $
+                        </button>
+                      )
+                    }
                   </div>
                   <div className="card-body container">
                     <div className="row">
                       <div className="col-8">
-                        <p>{record.description}</p>
+                        <h5>Crime ID: {record.crimeId}</h5>
+                        <p>Description: {record.description}</p>
                       </div>
                       <div className="col-4">
                         <img src={testImg} className="rounded w-100" />

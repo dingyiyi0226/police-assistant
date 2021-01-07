@@ -9,7 +9,7 @@ class CrimeUploader
     super(props)
     this.state = {
       offense_type: "",
-      user_id: "",
+      userName: "",
       description: ""
     };
 
@@ -23,16 +23,23 @@ class CrimeUploader
     this.setState({ offense_type: event.target.value });
   }
   handleSubmit() {
-    console.log(this.state);
     let timestamp = 'test'
     let image_url = 'image_url'
-    console.log(this.props.accounts)
+    
     this.props.contract.methods.addCrimeReport(
-      this.state.user_id, timestamp, this.state.offense_type, this.state.description, image_url).send({ from: this.props.accounts[0] });
+      this.state.userName,
+      this.props.accounts[0],
+      this.state.offense_type,
+      this.state.description,
+      timestamp,
+      image_url
+    ).send({ from: this.props.accounts[0] });
   }
+
   IDChange(event) {
-    this.setState({ user_id: event.target.value });
+    this.setState({ userName: event.target.value });
   }
+
   descriptionChange(event) {
     this.setState({ description: event.target.value });
   }
@@ -47,8 +54,8 @@ class CrimeUploader
           <div className="card" style={{ width: "60%", textAlign: 'left' }}>
             <div className="card-body">
               <div className="mb-1">
-                <label className="form-label" htmlFor="user_id">User ID</label>
-                <input className="form-control" type="text" id="user_id" name="user_id" placeholder="dingyiyi" onChange={this.IDChange} />
+                <label className="form-label" htmlFor="userName">User Name</label>
+                <input className="form-control" type="text" id="userName" name="userName" placeholder="dingyiyi" onChange={this.IDChange} />
               </div>
               { OFFENSE_TYPE.map( (type, index) => (
                   <div className="form-check form-check-inline" key={index}>

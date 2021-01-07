@@ -8,6 +8,7 @@
   text-align: left;
 }
 
-.crime-card img {
-  /*width: 60px;*/
+.reward-btn:disabled {
+  border-color: green;
+  background-color: green;
 }

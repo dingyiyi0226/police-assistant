@@ -4,33 +4,33 @@ pragma experimental ABIEncoderV2;
 
 contract CrimeData {
   struct CrimeDetails {
+    uint crimeId;
+    string name;
     string account;
-    string timestamp;
     string offenseCode;
     string description;
+    string timestamp;
     string imageURL;
 
-    int rewardState;
+    int rewardState; // 0 for not verified crime, 1 for verified crime
   }
   CrimeDetails[] public crime;
 
-  function addCrimeReport(string memory _account, string memory _timestamp, string memory _offenseCode, string memory _description, string memory _imageURL) public returns(uint) {
+  function addCrimeReport(string memory name, string memory account, string memory offenseCode, string memory description, string memory timestamp, string memory imageURL) public returns(uint) {
     crime.length++;
-    crime[crime.length-1].account = _account;
-    crime[crime.length-1].timestamp = _timestamp;
-    crime[crime.length-1].offenseCode = _offenseCode;
-    crime[crime.length-1].description = _description;
-    crime[crime.length-1].imageURL = _imageURL;
-    crime[crime.length-1].rewardState = -1;  // -1 not verified crime
+    crime[crime.length-1].crimeId = crime.length-1;
+    crime[crime.length-1].name = name;
+    crime[crime.length-1].account = account;
+    crime[crime.length-1].offenseCode = offenseCode;
+    crime[crime.length-1].description = description;
+    crime[crime.length-1].timestamp = timestamp;
+    crime[crime.length-1].imageURL = imageURL;
+    crime[crime.length-1].rewardState = 0;
     return crime.length;
   }
   
   function getCrimeCount() public view returns(uint) {
     return crime.length;
-  }
-  
-  function getCrimeBlock(uint index) public view returns (string memory, string memory, string memory, string memory, string memory){
-    return (crime[index].account, crime[index].timestamp, crime[index].offenseCode, crime[index].description, crime[index].imageURL);
   }
 
   function getAllCrimeDetails() public view returns (CrimeDetails[] memory){
@@ -41,5 +41,12 @@ contract CrimeData {
     }
     return allCrime;
   }
+
+  function setRewardState(uint crimeId) public returns(bool) {
+    crime[crimeId].rewardState = 1;
+    return true;
+  }
+
+
 
 }
