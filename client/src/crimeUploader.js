@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImageUploader from './ImageUploader';
 
 const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson', 'Other']
 
@@ -10,7 +11,9 @@ class CrimeUploader
     this.state = {
       offense_type: "",
       userName: "",
-      description: ""
+      description: "",
+      // image_url: "https://i.imgur.com/VUQnpR1.png"
+      image_url: null
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,17 +25,22 @@ class CrimeUploader
   labelChange(event) {
     this.setState({ offense_type: event.target.value });
   }
+
+  setImageURL = (url) => {
+    console.log(`change url to ${url}`);
+    this.setState({ image_url: url });
+  }
+
   handleSubmit() {
     let timestamp = 'test'
-    let image_url = 'image_url'
-    
+
     this.props.contract.methods.addCrimeReport(
       this.state.userName,
       this.props.accounts[0],
       this.state.offense_type,
       this.state.description,
       timestamp,
-      image_url
+      this.state.image_url
     ).send({ from: this.props.accounts[0] });
   }
 
@@ -69,6 +77,8 @@ class CrimeUploader
                 <label className="form-label" htmlFor="description">Description: </label>
                 <input className="form-control" type="text" id="description" name="description" placeholder="Enter here..." onChange={this.descriptionChange} />
               </div>
+
+              <ImageUploader setImageURL={this.setImageURL} image_url={this.state.image_url} />
 
               <button className="btn btn-primary" onClick={() => this.handleSubmit()}>Submit</button>
             </div>

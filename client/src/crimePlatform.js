@@ -115,7 +115,7 @@ class CrimePlatform extends Component {
                         <p>Description: {record.description}</p>
                       </div>
                       <div className="col-4">
-                        <img src={testImg} className="rounded w-100" />
+                        <img src={record.imageURL} className="rounded w-100" />
                       </div>
                     </div>
                   </div>
