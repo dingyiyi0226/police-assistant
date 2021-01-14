@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { BrowserRouter, NavLink, Switch, Route } from 'react-router-dom'
 import CrimeDataContract from "./contracts/CrimeData.json";
 import getWeb3 from "./getWeb3";
+import Ipfs from 'ipfs-core';
 
 import CrimeUploader from './crimeUploader.js'
 import CrimePlatform from './crimePlatform.js'
 import CrimeMap from './crimeMap.js'
-import "./App.css";
-
 import Navbar from './components/Navbar';
+import "./App.css";
 
 class App extends Component {
 
@@ -18,6 +18,7 @@ class App extends Component {
       web3: null,
       accounts: null,
       contract: null,
+      ipfs: null
     };
   }
 
@@ -49,12 +50,21 @@ class App extends Component {
       );
       console.error(error);
     }
+    if (!this.state.ipfs) {
+      const ipfsNode = await Ipfs.create()
+      this.setState({ipfs: ipfsNode})
+      console.log('Init Ipfs')
+    }
+
   };
 
   render() {
-    const { web3, accounts, contract} = this.state
+    const { web3, accounts, contract, ipfs } = this.state
     if (!web3) {
       return <h4>Loading Web3, accounts, and contract...</h4>;
+    }
+    if (!ipfs) {
+      return <h4>Loading Ipfs...</h4>;
     }
     return (
       <BrowserRouter>
@@ -62,7 +72,7 @@ class App extends Component {
             <Navbar />
             <Switch>
               <Route path='/upload' render={props => {
-                return <CrimeUploader web3={web3} accounts={accounts} contract={contract}></CrimeUploader>
+                return <CrimeUploader web3={web3} accounts={accounts} contract={contract} ipfs={ipfs}></CrimeUploader>
               }}></Route>
               <Route path='/record' render={props => {
                 return <CrimePlatform web3={web3} accounts={accounts} contract={contract}></CrimePlatform>

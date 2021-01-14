@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import ImageUploader from './ImageUploader';
-import ImageIpfsUploader from './ImageIpfsUploader.js';
+import uint8ArrayConcat from 'uint8arrays/concat';
 
 const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson', 'Other']
 const NTULibrary = {lat: 25.0174, lng: 121.5405}
@@ -69,6 +68,26 @@ class CrimeUploader extends Component {
     this.setState({ longitude: event.target.value });
   }
 
+  uploadImage = async () => {
+    // console.log(this.props.ipfs)
+
+    const imageFile = document.getElementsByClassName('input-image')[0].files[0]
+    console.log(imageFile)
+    const { path } = await this.props.ipfs.add(imageFile)
+    console.log('result', path)
+
+    let content = []
+    for await (const chunk of this.props.ipfs.cat(path)) {
+      content.push(chunk)
+    }
+
+    const imageRaw = uint8ArrayConcat(content)
+    const buffer = new Blob([imageRaw.buffer])
+    const newurl = URL.createObjectURL(buffer)
+    // console.log(newurl)
+    this.setImageURL(newurl)
+  }
+
   render() {
     if (!this.props.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -103,8 +122,18 @@ class CrimeUploader extends Component {
                 <input className="form-control" type="text" id="longitude" name="longitude" placeholder={NTULibrary.lng} onChange={this.longitudeChange} />
               </div>
 
-              {/*<ImageUploader setImageURL={this.setImageURL} image_url={this.state.image_url} />*/}
-              <ImageIpfsUploader setImageURL={this.setImageURL} image_url={this.state.image_url} />
+              { this.state.image_url ? (
+                  <div className='col-4' style={{float: 'right', padding: '10px'}} >
+                    <img src={this.state.image_url} className="rounded w-100" />
+                  </div>
+                ) : (
+                  null
+                )
+              }
+              <label className="form-label" htmlFor="image">Image: </label>
+              <div className="input-group mb-3">
+                <input type="file" className="input-image form-control" id="image" onChange={this.uploadImage}/>
+              </div>
 
               <button className="btn btn-primary" onClick={() => this.handleSubmit()}>Submit</button>
             </div>
