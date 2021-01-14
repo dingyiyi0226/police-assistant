@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
+import uint8ArrayConcat from 'uint8arrays/concat';
 
 import './style.css'
 
@@ -13,9 +14,9 @@ class CrimePlatform extends Component {
     super(props)
     this.state = {
       records: [],
+      imageURL: {},
       offenseType: '',
     };
-
   }
 
   componentDidMount() {
@@ -24,9 +25,31 @@ class CrimePlatform extends Component {
 
   getRecords = async () => {
     const { contract } = this.props
-    const response = await contract.methods.getAllCrimeDetails().call()
-    console.log('resp', response)
-    this.setState({ 'records': response })
+    const records = await contract.methods.getAllCrimeDetails().call()
+    console.log('resp', records)
+
+    let imageURL = {}
+    for (const record of records){
+      const url = await this.getImage(record.imageCID)
+      imageURL[record.crimeId] = url
+    }
+
+    this.setState({
+      'records': records,
+      'imageURL': imageURL
+    })
+  }
+
+  getImage = async (cid) => {
+    let content = []
+    for await (const chunk of this.props.ipfs.cat(cid)) {
+      content.push(chunk)
+    }
+    const imageRaw = uint8ArrayConcat(content)
+    const buffer = new Blob([imageRaw.buffer])
+    const imageURL = URL.createObjectURL(buffer)
+    // console.log(imageURL)
+    return imageURL
   }
 
   sendReward = async (e, crimeId, account) => {
@@ -110,7 +133,7 @@ class CrimePlatform extends Component {
                         <p>Description: {record.description}</p>
                       </div>
                       <div className="col-4">
-                        <img src={record.imageURL} className="rounded w-100" />
+                        <img src={this.state.imageURL[record.crimeId]} className="rounded w-100" />
                       </div>
                     </div>
                   </div>

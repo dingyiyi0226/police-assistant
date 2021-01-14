@@ -10,14 +10,14 @@ contract CrimeData {
     string offenseCode;
     string description;
     string timestamp;
-    string imageURL;
+    string imageCID;
     string location;
 
     int rewardState; // 0 for not verified crime, 1 for verified crime
   }
   CrimeDetails[] public crime;
 
-  function addCrimeReport(string memory name, string memory account, string memory offenseCode, string memory description, string memory timestamp, string memory imageURL, string memory location) public returns(uint) {
+  function addCrimeReport(string memory name, string memory account, string memory offenseCode, string memory description, string memory timestamp, string memory imageCID, string memory location) public returns(uint) {
     crime.length++;
     crime[crime.length-1].crimeId = crime.length-1;
     crime[crime.length-1].name = name;
@@ -25,7 +25,7 @@ contract CrimeData {
     crime[crime.length-1].offenseCode = offenseCode;
     crime[crime.length-1].description = description;
     crime[crime.length-1].timestamp = timestamp;
-    crime[crime.length-1].imageURL = imageURL;
+    crime[crime.length-1].imageCID = imageCID;
     crime[crime.length-1].location = location;
     crime[crime.length-1].rewardState = 0;
     return crime.length;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import uint8ArrayConcat from 'uint8arrays/concat';
 
 const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson', 'Other']
 const NTULibrary = {lat: 25.0174, lng: 121.5405}
@@ -14,35 +13,26 @@ class CrimeUploader extends Component {
       description: "",
       latitude: "",
       longitude: "",
-      // image_url: "https://i.imgur.com/VUQnpR1.png"
-      image_url: null,
+
+      imagePreviewURL: "",
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.labelChange = this.labelChange.bind(this);
-    this.IDChange = this.IDChange.bind(this);
-    this.descriptionChange = this.descriptionChange.bind(this);
-    this.latitudeChange = this.latitudeChange.bind(this);
-    this.longitudeChange = this.longitudeChange.bind(this);
   }
 
-  labelChange(event) {
-    this.setState({ offense_type: event.target.value });
-  }
-
-  setImageURL = (url) => {
-    console.log(`change url to ${url}`);
-    this.setState({ image_url: url });
-  }
-
-  handleSubmit() {
+  handleSubmit = async () => {
     console.log(this.state.latitude)
     console.log(this.state.latitude || NTULibrary.lat)
     let timestamp = 'test'
+
     let location = {
       lat: this.state.latitude || NTULibrary.lat,
       lng: this.state.longitude || NTULibrary.lng,
     }
+
+    /* Upload image to IPFS */
+    const imageFile = await fetch(this.state.imagePreviewURL).then(r => r.blob())
+
+    const { path } = await this.props.ipfs.add(imageFile)
+    console.log('Result CID', path)
 
     this.props.contract.methods.addCrimeReport(
       this.state.userName,
@@ -50,42 +40,20 @@ class CrimeUploader extends Component {
       this.state.offense_type,
       this.state.description,
       timestamp,
-      this.state.image_url,
+      path,
       JSON.stringify(location)
     ).send({ from: this.props.accounts[0] });
   }
 
-  IDChange(event) {
-    this.setState({ userName: event.target.value });
-  }
-  descriptionChange(event) {
-    this.setState({ description: event.target.value });
-  }
-  latitudeChange(event) {
-    this.setState({ latitude: event.target.value });
-  }
-  longitudeChange(event) {
-    this.setState({ longitude: event.target.value });
+  setFormOptions = (e) => {
+    const { name, value } = e.target
+    this.setState({ [name]: value });
   }
 
-  uploadImage = async () => {
-    // console.log(this.props.ipfs)
-
-    const imageFile = document.getElementsByClassName('input-image')[0].files[0]
-    console.log(imageFile)
-    const { path } = await this.props.ipfs.add(imageFile)
-    console.log('result', path)
-
-    let content = []
-    for await (const chunk of this.props.ipfs.cat(path)) {
-      content.push(chunk)
-    }
-
-    const imageRaw = uint8ArrayConcat(content)
-    const buffer = new Blob([imageRaw.buffer])
-    const newurl = URL.createObjectURL(buffer)
-    // console.log(newurl)
-    this.setImageURL(newurl)
+  uploadImage = async (e) => {
+    const imageFile = e.target.files[0]
+    const imagePreviewURL = URL.createObjectURL(imageFile)
+    this.setState({ imagePreviewURL: imagePreviewURL});
   }
 
   render() {
@@ -99,32 +67,32 @@ class CrimeUploader extends Component {
             <div className="card-body">
               <div className="mb-1">
                 <label className="form-label" htmlFor="userName">User Name</label>
-                <input className="form-control" type="text" id="userName" name="userName" placeholder="dingyiyi" onChange={this.IDChange} />
+                <input className="form-control" type="text" id="userName" name="userName" placeholder="dingyiyi" onChange={this.setFormOptions} />
               </div>
               { OFFENSE_TYPE.map( (type, index) => (
                   <div className="form-check form-check-inline" key={index}>
                     <input className="form-check-input" type="radio" name="offense_type" id={type} value={type}
-                           checked={this.state.offense_type === type} onChange={this.labelChange} />
+                           checked={this.state.offense_type === type} onChange={this.setFormOptions} />
                     <label className="form-check-label" htmlFor={type}>{type}</label>
                   </div>
                 ))
               }
               <div className="mb-3">
                 <label className="form-label" htmlFor="description">Description: </label>
-                <input className="form-control" type="text" id="description" name="description" placeholder="Enter here..." onChange={this.descriptionChange} />
+                <input className="form-control" type="text" id="description" name="description" placeholder="Enter here..." onChange={this.setFormOptions} />
               </div>
               <div className="mb-3">
                 <label className="form-label" htmlFor="latitude">Latitude: </label>
-                <input className="form-control" type="text" id="latitude" name="latitude" placeholder={NTULibrary.lat} onChange={this.latitudeChange} />
+                <input className="form-control" type="text" id="latitude" name="latitude" placeholder={NTULibrary.lat} onChange={this.setFormOptions} />
               </div>
               <div className="mb-3">
                 <label className="form-label" htmlFor="longitude">Longitude: </label>
-                <input className="form-control" type="text" id="longitude" name="longitude" placeholder={NTULibrary.lng} onChange={this.longitudeChange} />
+                <input className="form-control" type="text" id="longitude" name="longitude" placeholder={NTULibrary.lng} onChange={this.setFormOptions} />
               </div>
 
-              { this.state.image_url ? (
+              { this.state.imagePreviewURL ? (
                   <div className='col-4' style={{float: 'right', padding: '10px'}} >
-                    <img src={this.state.image_url} className="rounded w-100" />
+                    <img src={this.state.imagePreviewURL} className="rounded w-100" />
                   </div>
                 ) : (
                   null

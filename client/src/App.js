@@ -75,10 +75,10 @@ class App extends Component {
                 return <CrimeUploader web3={web3} accounts={accounts} contract={contract} ipfs={ipfs}></CrimeUploader>
               }}></Route>
               <Route path='/record' render={props => {
-                return <CrimePlatform web3={web3} accounts={accounts} contract={contract}></CrimePlatform>
+                return <CrimePlatform web3={web3} accounts={accounts} contract={contract} ipfs={ipfs}></CrimePlatform>
               }}></Route>
               <Route path='/map' render={props => {
-                return <CrimeMap web3={web3} accounts={accounts} contract={contract}></CrimeMap>
+                return <CrimeMap web3={web3} accounts={accounts} contract={contract} ipfs={ipfs}></CrimeMap>
               }}></Route>
             </Switch>
         </div>

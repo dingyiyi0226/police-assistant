@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
+import uint8ArrayConcat from 'uint8arrays/concat';
 
 import './style.css'
 
@@ -11,6 +12,7 @@ class CrimeMap extends Component {
     super(props)
     this.state = {
       records: [],
+      imageURL: {},
       offenseType: '',
       mapCenter: NTULibrary
     }
@@ -22,19 +24,41 @@ class CrimeMap extends Component {
 
   getRecords = async () => {
     const { contract } = this.props
-    const response = await contract.methods.getAllCrimeDetails().call()
-    console.log('mapresp', response)
-    this.setState({ 'records': response})
+    const records = await contract.methods.getAllCrimeDetails().call()
+    console.log('mapresp', records)
+
+    let imageURL = {}
+    for (const record of records){
+      const url = await this.getImage(record.imageCID)
+      imageURL[record.crimeId] = url
+    }
+
+    this.setState({
+      'records': records,
+      'imageURL': imageURL
+    })
   }
 
-  getInfoWindowString = (record) => `
+  getImage = async (cid) => {
+    let content = []
+    for await (const chunk of this.props.ipfs.cat(cid)) {
+      content.push(chunk)
+    }
+    const imageRaw = uint8ArrayConcat(content)
+    const buffer = new Blob([imageRaw.buffer])
+    const imageURL = URL.createObjectURL(buffer)
+    // console.log(imageURL)
+    return imageURL
+  }
+
+  getInfoWindowString = (record, imageURL) => `
   <div class="crime-map__info-window">
     <p>${record.name}</p>
     <p>${record.offenseCode}</p>
-    <img src=${record.imageURL} alt="">
+    <img src=${imageURL} alt="">
   </div>`;
   
-  renderGoogleApi = (map, maps, records) => {  // map is the map instance, maps is the maps API object
+  renderGoogleApi = (map, maps, records, imageURL) => {  // map is the map instance, maps is the maps API object
     const markers = [];
     const infowindows = [];
     console.log('render ', records)
@@ -51,7 +75,7 @@ class CrimeMap extends Component {
         map,
       }))
       infowindows.push(new maps.InfoWindow({
-        content: this.getInfoWindowString(record),
+        content: this.getInfoWindowString(record, imageURL[record.crimeId]),
       }))
     })
     
@@ -104,7 +128,7 @@ class CrimeMap extends Component {
                   defaultCenter={this.state.mapCenter}
                   defaultZoom={12}
                   yesIWantToUseGoogleMapApiInternals
-                  onGoogleApiLoaded={({map, maps}) => this.renderGoogleApi(map, maps, this.filteredRecord())}
+                  onGoogleApiLoaded={({map, maps}) => this.renderGoogleApi(map, maps, this.filteredRecord(), this.state.imageURL)}
                 >
                 </GoogleMap>
               </div>
