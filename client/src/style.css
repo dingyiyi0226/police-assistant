@@ -12,3 +12,23 @@
   border-color: green;
   background-color: green;
 }
+
+
+.crime-map {
+  margin: auto;
+  padding-top: 10px;
+  height: 60vh;
+  width: 90vw;
+  text-align: left;
+}
+
+.crime-map__info-window img {
+  width: 100pt;
+  text-align: center;
+}
+
+.crime-map__info-window p {
+  font-size: 14px;
+  margin-bottom: 0.25rem;
+  text-align: center;
+}

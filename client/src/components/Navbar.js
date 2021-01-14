@@ -18,6 +18,9 @@ function Navbar(props) {
                         <li className="nav-item">
                             <NavLink className="nav-link" to='/record'>Record</NavLink>
                         </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to='/map'>Map</NavLink>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -19,9 +19,7 @@ class CrimePlatform extends Component {
   }
 
   componentDidMount() {
-    if (this.props.web3) {
-      this.getRecords();
-    }
+    this.getRecords();
   }
 
   getRecords = async () => {
@@ -68,10 +66,6 @@ class CrimePlatform extends Component {
   }
 
   render() {
-    if (!this.props.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
-
     return (
       <React.Fragment>
         <div className="container">

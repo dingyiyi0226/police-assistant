@@ -5,6 +5,7 @@ import getWeb3 from "./getWeb3";
 
 import CrimeUploader from './crimeUploader.js'
 import CrimePlatform from './crimePlatform.js'
+import CrimeMap from './crimeMap.js'
 import "./App.css";
 
 import Navbar from './components/Navbar';
@@ -52,6 +53,9 @@ class App extends Component {
 
   render() {
     const { web3, accounts, contract} = this.state
+    if (!web3) {
+      return <h4>Loading Web3, accounts, and contract...</h4>;
+    }
     return (
       <BrowserRouter>
         <div className="App">
@@ -62,6 +66,9 @@ class App extends Component {
               }}></Route>
               <Route path='/record' render={props => {
                 return <CrimePlatform web3={web3} accounts={accounts} contract={contract}></CrimePlatform>
+              }}></Route>
+              <Route path='/map' render={props => {
+                return <CrimeMap web3={web3} accounts={accounts} contract={contract}></CrimeMap>
               }}></Route>
             </Switch>
         </div>
