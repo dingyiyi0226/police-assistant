@@ -40,11 +40,14 @@ class CrimeMap extends Component {
     console.log('render ', records)
 
     records.forEach(record => {
+      const strLocation = JSON.parse(record.location)
+      const location = {
+        lat: parseFloat(strLocation.lat),
+        lng: parseFloat(strLocation.lng)
+      }
+      
       markers.push(new maps.Marker({
-        position: {
-          lat: NTULibrary.lat,
-          lng: NTULibrary.lng,
-        },
+        position: location,
         map,
       }))
       infowindows.push(new maps.InfoWindow({

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ImageUploader from './ImageUploader';
 
 const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson', 'Other']
+const NTULibrary = {lat: 25.0174, lng: 121.5405}
 
 class CrimeUploader
  extends Component {
@@ -12,14 +13,18 @@ class CrimeUploader
       offense_type: "",
       userName: "",
       description: "",
+      latitude: "",
+      longitude: "",
       // image_url: "https://i.imgur.com/VUQnpR1.png"
-      image_url: null
+      image_url: null,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.labelChange = this.labelChange.bind(this);
     this.IDChange = this.IDChange.bind(this);
     this.descriptionChange = this.descriptionChange.bind(this);
+    this.latitudeChange = this.latitudeChange.bind(this);
+    this.longitudeChange = this.longitudeChange.bind(this);
   }
 
   labelChange(event) {
@@ -32,7 +37,13 @@ class CrimeUploader
   }
 
   handleSubmit() {
+    console.log(this.state.latitude)
+    console.log(this.state.latitude || NTULibrary.lat)
     let timestamp = 'test'
+    let location = {
+      lat: this.state.latitude || NTULibrary.lat,
+      lng: this.state.longitude || NTULibrary.lng,
+    }
 
     this.props.contract.methods.addCrimeReport(
       this.state.userName,
@@ -40,16 +51,22 @@ class CrimeUploader
       this.state.offense_type,
       this.state.description,
       timestamp,
-      this.state.image_url
+      this.state.image_url,
+      JSON.stringify(location)
     ).send({ from: this.props.accounts[0] });
   }
 
   IDChange(event) {
     this.setState({ userName: event.target.value });
   }
-
   descriptionChange(event) {
     this.setState({ description: event.target.value });
+  }
+  latitudeChange(event) {
+    this.setState({ latitude: event.target.value });
+  }
+  longitudeChange(event) {
+    this.setState({ longitude: event.target.value });
   }
 
   render() {
@@ -76,6 +93,14 @@ class CrimeUploader
               <div className="mb-3">
                 <label className="form-label" htmlFor="description">Description: </label>
                 <input className="form-control" type="text" id="description" name="description" placeholder="Enter here..." onChange={this.descriptionChange} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="latitude">Latitude: </label>
+                <input className="form-control" type="text" id="latitude" name="latitude" placeholder={NTULibrary.lat} onChange={this.latitudeChange} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="longitude">Longitude: </label>
+                <input className="form-control" type="text" id="longitude" name="longitude" placeholder={NTULibrary.lng} onChange={this.longitudeChange} />
               </div>
 
               <ImageUploader setImageURL={this.setImageURL} image_url={this.state.image_url} />
