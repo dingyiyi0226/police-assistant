@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import ImageUploader from './ImageUploader';
+import ImageIpfsUploader from './ImageIpfsUploader.js';
 
 const OFFENSE_TYPE = ['Homicide', 'Forcible rape', 'Robbery', 'Assault', 'Burglary', 'Arson', 'Other']
 const NTULibrary = {lat: 25.0174, lng: 121.5405}
 
-class CrimeUploader
- extends Component {
+class CrimeUploader extends Component {
 
   constructor(props) {
     super(props)
@@ -103,7 +103,8 @@ class CrimeUploader
                 <input className="form-control" type="text" id="longitude" name="longitude" placeholder={NTULibrary.lng} onChange={this.longitudeChange} />
               </div>
 
-              <ImageUploader setImageURL={this.setImageURL} image_url={this.state.image_url} />
+              {/*<ImageUploader setImageURL={this.setImageURL} image_url={this.state.image_url} />*/}
+              <ImageIpfsUploader setImageURL={this.setImageURL} image_url={this.state.image_url} />
 
               <button className="btn btn-primary" onClick={() => this.handleSubmit()}>Submit</button>
             </div>

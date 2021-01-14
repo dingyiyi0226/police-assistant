@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "google-map-react": "^2.1.9",
+    "ipfs-core": "^0.3.1",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.2.0",
+    "uint8arrays": "^2.0.5",
     "web3": "1.2.2"
   },
   "scripts": {
