@@ -35,18 +35,11 @@ class ImageIpfsUploader extends Component {
     for await (const chunk of ipfs.cat(path)) {
       content.push(chunk)
     }
-    console.log('content', content)
-
+    
     const imageRaw = uint8ArrayConcat(content)
-
-    console.log('merged', imageRaw)
-    // console.log(imageRaw)
-
     const buffer = new Blob([imageRaw.buffer])
-    console.log('buffer', buffer)
-
     const newurl = URL.createObjectURL(buffer)
-    console.log(newurl)
+    // console.log(newurl)
     this.props.setImageURL(newurl)
   }
 
