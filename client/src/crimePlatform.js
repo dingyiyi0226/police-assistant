@@ -106,6 +106,7 @@ class CrimePlatform extends Component {
                     <div className="row">
                       <div className="col-8">
                         <h5>Crime ID: {record.crimeId}</h5>
+                        <p>Offence Type: {record.offenseCode}</p>
                         <p>Description: {record.description}</p>
                       </div>
                       <div className="col-4">

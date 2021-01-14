@@ -30,6 +30,7 @@ class CrimeMap extends Component {
   getInfoWindowString = (record) => `
   <div class="crime-map__info-window">
     <p>${record.name}</p>
+    <p>${record.offenseCode}</p>
     <img src=${record.imageURL} alt="">
   </div>`;
   

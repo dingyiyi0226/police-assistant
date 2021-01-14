@@ -8,6 +8,11 @@
   text-align: left;
 }
 
+.crime-card .card-body p {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .reward-btn:disabled {
   border-color: green;
   background-color: green;
