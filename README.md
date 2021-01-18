@@ -38,3 +38,5 @@ Data in the blockchain is shared between every single node, which is extremely i
 
 Report a crime on the upload page. The form includes user name, offense type, description of what you witnessed or encountered, latitude and longitude of the crime scene and also an image about the case. Police will review the information users uploaded and determine whether the reported case is reasonable and useful, and then click the $ button on the record page to send ETH. User can check crime record by category or by position. We embed Google Maps into the map page, so user can check the crime case around himself or herself easily and clearly.
 
+![Screenshot](screenshot.png)
+
