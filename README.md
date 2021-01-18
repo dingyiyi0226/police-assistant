@@ -31,6 +31,7 @@ Police Assistant is a decentralized application. To reduce police’s heavy work
 
 - Front-end : Javascript & React
 - Back-end : Truffle, Ganache-cli, Metamask, Solidity, IPFS, Google map API
+
 Data in the blockchain is shared between every single node, which is extremely inefficient. So we decide to use IPFS for image uploading to have only some nodes storing the data, namely decentralized it.
 
 ## Procedure
