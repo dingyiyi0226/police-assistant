@@ -1,6 +1,9 @@
 # Police Assistant
 A decentralized platform to report a crime
 
+## Demo Video
+https://youtu.be/Ahk46HJ8ucc
+
 ## How to run
 
 Install ganache and truffle
